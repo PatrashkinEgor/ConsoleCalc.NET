@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    abstract class MathOperation : IExecutable
+    public abstract class MathOperation : IExecutable
     {
         private Priority priority;
         private NumberOfArgs numberOfArgs;
@@ -25,12 +25,12 @@ namespace ConsoleCalc
 
         public abstract double Execute(params double[] arg);
     }
-    enum Priority
+    public enum Priority
     {
         HIGHT,
         LOW
     }
-    enum NumberOfArgs
+    public enum NumberOfArgs
     {
         ONE,
         TWO

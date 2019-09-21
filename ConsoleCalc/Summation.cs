@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    class Summation : MathOperation
+    public class Summation : MathOperation
     {
         public Summation() : base(Priority.LOW, NumberOfArgs.TWO){}
 
