@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    interface Executable
+    interface IExecutable
     {
         double Execute(params double[] arg);
     }

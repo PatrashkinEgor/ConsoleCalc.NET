@@ -44,10 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DividedByZeroException.cs" />
-    <Compile Include="Executable.cs" />
-    <Compile Include="MathOperations.cs" />
+    <Compile Include="Division.cs" />
+    <Compile Include="IExecutable.cs" />
+    <Compile Include="MathOperation.cs" />
+    <Compile Include="Multiplication.cs" />
+    <Compile Include="Operations.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subtraction.cs" />
+    <Compile Include="Summation.cs" />
     <Compile Include="SyntaxException.cs" />
   </ItemGroup>
   <ItemGroup>
