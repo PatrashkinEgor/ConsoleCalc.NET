@@ -6,7 +6,7 @@ namespace ConsoleCalc.Test
     [TestFixture]
     public class DivisionTest
     {
-        Division div;
+        private Division div;
 
         [SetUp]
         public void Init()
@@ -44,5 +44,5 @@ namespace ConsoleCalc.Test
     }
 
 
-    
+
 }

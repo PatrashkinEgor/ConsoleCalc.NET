@@ -8,7 +8,7 @@ namespace ConsoleCalc
 {
     public class Summation : MathOperation
     {
-        public Summation() : base(Priority.LOW, NumberOfArgs.TWO){}
+        public Summation() : base(Priority.LOW, NumberOfArgs.TWO) { }
 
         override
         public double Execute(params double[] arg)

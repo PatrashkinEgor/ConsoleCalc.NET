@@ -4,14 +4,14 @@ using NUnit.Framework;
 namespace ConsoleCalc.Test
 {
     [TestFixture]
-    public class ParserTest
+    public class ParsingCalculatorTest
     {
-        Parser parser;
+        private ParsingCalculator calc;
 
         [SetUp]
         public void Init()
         {
-            parser = new Parser();
+            calc = new ParsingCalculator();
         }
 
 
@@ -21,8 +21,8 @@ namespace ConsoleCalc.Test
         [TestCase("3,3,1", 0, "3,3")]
         public void CutNumberFromStringTest(string input, int pt, string expected)
         {
-            string actual = Parser.CutNumberFromString(input, pt);
-            Assert.AreEqual(expected,actual);
+            string actual = ParsingCalculator.CutNumberFromString(input, pt);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase("")]
@@ -33,7 +33,7 @@ namespace ConsoleCalc.Test
         [TestCase("f*a*d*e")]
         public void CountNotValidStringTest(string input)
         {
-            Assert.Catch<SyntaxException>(() => parser.CountExpressionFromString(""));
+            Assert.Catch<SyntaxException>(() => calc.CountExpressionFromString(""));
         }
 
 
@@ -45,14 +45,14 @@ namespace ConsoleCalc.Test
         [TestCase("3,14*0,5", 1.57)]
         public void CountExpTest(string input, double expected)
         {
-            double actual = parser.CountExpressionFromString(input);
+            double actual = calc.CountExpressionFromString(input);
             Assert.AreEqual(expected, actual);
         }
 
         [Test]
         public void CountNullExpTest()
         {
-            Parser parser = new Parser();
+            ParsingCalculator parser = new ParsingCalculator();
             string input = null;
             Assert.Catch<NullReferenceException>(() => parser.CountExpressionFromString(input));
         }

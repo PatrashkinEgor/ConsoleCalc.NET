@@ -19,7 +19,8 @@ namespace ConsoleCalc
         {
             return priority;
         }
-        public NumberOfArgs GetNumberOfArgs() {
+        public NumberOfArgs GetNumberOfArgs()
+        {
             return numberOfArgs;
         }
 

@@ -7,7 +7,7 @@ namespace ConsoleCalc.Test
     [TestFixture]
     public class SummationTest
     {
-        Summation sum;
+        private Summation sum;
 
         [SetUp]
         public void Init()

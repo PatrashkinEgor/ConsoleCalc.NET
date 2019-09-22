@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Parser parser = new Parser();
+            ParsingCalculator parser = new ParsingCalculator();
             string input;
             double output;
 
@@ -18,7 +18,9 @@ namespace ConsoleCalc
             {
                 Console.Clear();
                 Console.WriteLine("Enter the expression (press 'q' for exit):");
-                input = Console.ReadLine().Replace(" ", "");
+                input = Console.ReadLine();
+                input = RemoveSpaces(input);
+                input = ReplaseDotsWithСomma(input);
                 if (input[0] == 'q')
                     Environment.Exit(0);
                 try
@@ -37,6 +39,15 @@ namespace ConsoleCalc
                 Console.Write("\nPress any key to continue... ");
                 Console.ReadLine();
             }
+        }
+        private static string RemoveSpaces(string input)
+        {
+            return input.Replace(" ", "");
+        }
+
+        private static string ReplaseDotsWithСomma(string input)
+        {
+            return input.Replace(".", ",");
         }
     }
 }

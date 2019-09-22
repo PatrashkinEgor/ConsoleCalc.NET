@@ -47,12 +47,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DivisionTest.cs" />
-    <Compile Include="MultiplicationTest.cs" />
-    <Compile Include="OperationsTest.cs" />
-    <Compile Include="ParserTest.cs" />
-    <Compile Include="SubtructionTest.cs" />
-    <Compile Include="SummationTest.cs" />
+    <Compile Include="MathTests\DivisionTest.cs" />
+    <Compile Include="MathTests\MultiplicationTest.cs" />
+    <Compile Include="MathTests\OperationsTest.cs" />
+    <Compile Include="CalcTests\ParsingCalculatorTest.cs" />
+    <Compile Include="MathTests\SubtructionTest.cs" />
+    <Compile Include="MathTests\SummationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

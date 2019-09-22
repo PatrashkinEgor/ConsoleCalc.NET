@@ -5,9 +5,9 @@ using NUnit.Framework;
 namespace ConsoleCalc.Test
 {
     [TestFixture]
-    public class SubtractionTest 
+    public class SubtractionTest
     {
-        Subtraction sub;
+        private Subtraction sub;
 
         [SetUp]
         public void Init()

@@ -14,7 +14,6 @@ namespace ConsoleCalc.Test
         {
             Operations operations = new Operations();
             Assert.IsTrue(operations.ContainsCmd(cmd));
-          //  Assert.IsTrue(!operations.ContainsCmd('&'));
         }
 
         [Test]
@@ -24,7 +23,7 @@ namespace ConsoleCalc.Test
             Assert.IsTrue(!operations.ContainsCmd('#'));
         }
 
-        [TestCase(typeof(Summation),'+')]
+        [TestCase(typeof(Summation), '+')]
         [TestCase(typeof(Subtraction), '-')]
         [TestCase(typeof(Multiplication), '*')]
         [TestCase(typeof(Division), '/')]
@@ -32,7 +31,6 @@ namespace ConsoleCalc.Test
         {
             Operations operations = new Operations();
             Assert.IsInstanceOf(expected, operations.GetOperation(cmd));
-            //Assert.IsNull(operations.GetOperation('&'));
         }
 
         [Test]

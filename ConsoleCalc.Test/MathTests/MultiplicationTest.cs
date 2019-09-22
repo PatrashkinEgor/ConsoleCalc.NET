@@ -6,7 +6,7 @@ namespace ConsoleCalc.Test
     [TestFixture]
     public class MultiplicationTest
     {
-        Multiplication mul;
+        private Multiplication mul;
 
         [SetUp]
         public void Init()

@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    public class Parser
+    public class ParsingCalculator
     {
         private Lexem currentLexem;
- //       private MathOperation currentOperation;
+        private MathOperation currentOperation;
         private string inputStr;
         private int pt;
         private readonly Operations operations;
 
-        public Parser()
+        public ParsingCalculator()
         {
             currentLexem = new Lexem();
             operations = new Operations();
@@ -39,7 +39,7 @@ namespace ConsoleCalc
                     builder.Append(input[startPt]);
                     startPt++;
                 }
-                
+
             }
             return builder.ToString();
         }
@@ -48,7 +48,7 @@ namespace ConsoleCalc
         {
             inputStr = input;
             pt = 0;
-            this.currentLexem.type = LexemType.OPEN;
+            currentLexem.type = LexemType.OPEN;
             GetNextLexem();
             double value = CountLowPriorityCmd();
             if (currentLexem.type != LexemType.END)
@@ -60,7 +60,7 @@ namespace ConsoleCalc
 
 
 
-        void GetNextLexem() 
+        private void GetNextLexem()
         {
             if (pt >= inputStr.Length)
             {
@@ -86,45 +86,56 @@ namespace ConsoleCalc
                     currentLexem.type = LexemType.CLOSE;
                     break;
                 default:
-                    currentOperation = operations.GetOperation(inputStr[pt]);
-                    if (currentOperation == null)
-                    {
-                        throw new SyntaxException("Unknown argument", pt);
-                    } else if (currentLexem.type == LexemType.CMD)
-                    {
-                        throw new SyntaxException("Two args in a row", pt);
-                    }
-                    currentLexem.type = LexemType.CMD;
+                    GetNextCmdLexem();
                     break;
             }
             pt++;
         }
 
-        public double CountLowPriorityCmd()
+        private void GetNextCmdLexem()
+        {
+            currentOperation = operations.GetOperation(inputStr[pt]);
+            if (currentOperation == null)
+            {
+                throw new SyntaxException("Unknown argument", pt);
+            }
+            else if (currentLexem.type == LexemType.CMD)
+            {
+                throw new SyntaxException("Two args in a row", pt);
+            }
+            currentLexem.type = LexemType.CMD;
+        }
+
+        private double CountLowPriorityCmd()
         {
             double a = CountHightPriorityCmd();
-            while ((currentLexem.type == LexemType.CMD) &&(currentOperation.GetPriority()==Priority.LOW))
+            while (CurrentOperationActiveAndPriorityIs(Priority.LOW))
             {
+                if (CurrentOperationHaveOneArg())
+                    break;
                 GetNextLexem();
                 a = currentOperation.Execute(a, CountHightPriorityCmd());
             }
             return a;
         }
 
-        public double CountHightPriorityCmd()
+        private double CountHightPriorityCmd()
         {
             double a = GetMultiplier();
-            while ((currentLexem.type == LexemType.CMD) &&(currentOperation.GetPriority()==Priority.HIGHT))
+            while (CurrentOperationActiveAndPriorityIs(Priority.HIGHT))
             {
+                if (CurrentOperationHaveOneArg())
+                    break;
                 GetNextLexem();
                 a = currentOperation.Execute(a, CountHightPriorityCmd());
             }
             return a;
         }
 
-        public double GetMultiplier()
+
+        private double GetMultiplier()
         {
-            double result = 0;
+            double result;
             switch (currentLexem.type)
             {
                 case LexemType.NUMB:
@@ -132,38 +143,70 @@ namespace ConsoleCalc
                     GetNextLexem();
                     break;
                 case LexemType.OPEN:
-                    GetNextLexem();
-                    result = CountLowPriorityCmd();
-                    if (currentLexem.type !=LexemType.CLOSE)
-                    {
-                        throw new SyntaxException("Incomplete expression, expected \")\"", pt);
-                    }
-                        else GetNextLexem();
+                    result = CalcBraketsContents();
                     break;
                 case LexemType.CMD:
-                    if(typeof(Subtraction).IsInstanceOfType(currentOperation))
-                    {
-                        GetNextLexem();
-                        result = currentOperation.Execute(result, GetMultiplier());
-                    }
-                        else if(currentOperation.GetNumberOfArgs() == NumberOfArgs.ONE)
-                    {
-                        GetNextLexem();
-                        result = currentOperation.Execute(GetMultiplier());
-                    }
-                        else throw new SyntaxException("Unexpected command", pt-1);
+                    result = CalcUnaryOperations();
                     break;
                 case LexemType.END:
                     throw new SyntaxException("Incomplete expression", pt - 1);
                 default:
-                    throw new SyntaxException("Unexpected command", pt-1);
+                    throw new SyntaxException("Unexpected command", pt - 1);
             }
             return result;
         }
+
+        private double CalcBraketsContents()
+        {
+            double result = 0;
+            GetNextLexem();
+            result = CountLowPriorityCmd();
+            if (currentLexem.type != LexemType.CLOSE)
+            {
+                throw new SyntaxException("Incomplete expression, expected \")\"", pt);
+            }
+            else GetNextLexem();
+            return result;
+        }
+
+        private double CalcUnaryOperations()
+        {
+            double result = 0;
+            if (CurrentOperationIs(typeof(Subtraction)))
+            {
+                GetNextLexem();
+                result = currentOperation.Execute(result, GetMultiplier());
+            }
+            else if (CurrentOperationHaveOneArg())
+            {
+                GetNextLexem();
+                result = currentOperation.Execute(GetMultiplier());
+            }
+            else throw new SyntaxException("Unexpected command", pt - 1);
+            return result;
+        }
+
+
+
+        private bool CurrentOperationActiveAndPriorityIs(Priority priority)
+        {
+            return ((currentLexem.type == LexemType.CMD) && (currentOperation.GetPriority() == priority));
+        }
+
+        private bool CurrentOperationIs<T>(T requstedType) where T : Type
+        {
+            return requstedType.IsInstanceOfType(currentOperation);
+        }
+
+        private bool CurrentOperationHaveOneArg()
+        {
+            return currentOperation.GetNumberOfArgs() == NumberOfArgs.ONE;
+        }
+
+
     }
 
-
-    enum LexemType
+    internal enum LexemType
     {
         OPEN,
         CLOSE,
@@ -174,7 +217,6 @@ namespace ConsoleCalc
 
     internal class Lexem
     {
-        internal char cmd;
         internal double value;
         internal LexemType type;
     }
