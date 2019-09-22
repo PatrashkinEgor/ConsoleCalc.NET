@@ -55,7 +55,7 @@
     <Compile Include="Operations\Multiplication.cs" />
     <Compile Include="Operations\Operations.cs" />
     <Compile Include="ParsingCalculator\ParsingCalculator.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="UI\SimpleUI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Operations\Subtraction.cs" />
     <Compile Include="Operations\Summation.cs" />

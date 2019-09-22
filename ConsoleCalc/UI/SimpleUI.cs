@@ -1,4 +1,13 @@
-﻿using System;
+﻿/**
+ * Test task from Byndyusoft
+ *
+ * @author Egor Patrashkin
+ * @version dated Sep 23, 2019
+ */
+ 
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    internal class Program
+    internal class SimpleUI
     {
         private static void Main(string[] args)
         {
-            ParsingCalculator parser = new ParsingCalculator();
+            ParsingCalculator calc = new ParsingCalculator();
             string input;
             double output;
 
@@ -25,7 +34,7 @@ namespace ConsoleCalc
                     Environment.Exit(0);
                 try
                 {
-                    output = parser.CountExpressionFromString(input);
+                    output = calc.CountExpressionFromString(input);
                     Console.WriteLine("\nAnswer is " + output + ".");
                 }
                 catch (SyntaxException e)
