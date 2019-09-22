@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    class Subtraction : MathOperation
+    public class Subtraction : MathOperation
     {
         public Subtraction() : base(Priority.LOW, NumberOfArgs.TWO) { }
         override public double Execute(params double[] arg)
         {
+            if (arg.Length < (int)numberOfArgs)
+                throw new IndexOutOfRangeException("Not enough arguments to multiply");
             return arg[0] - arg[1];
         }
     }

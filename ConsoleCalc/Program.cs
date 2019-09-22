@@ -13,6 +13,7 @@ namespace ConsoleCalc
             Parser parser = new Parser();
             string input;
             double output;
+
             while (true)
             {
                 Console.Clear();
@@ -22,7 +23,7 @@ namespace ConsoleCalc
                     Environment.Exit(0);
                 try
                 {
-                    output = parser.countExpressionFromString(input);
+                    output = parser.CountExpressionFromString(input);
                     Console.WriteLine("\nAnswer is " + output + ".");
                 }
                 catch (SyntaxException e)

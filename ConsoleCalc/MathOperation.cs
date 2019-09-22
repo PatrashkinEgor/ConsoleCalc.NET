@@ -8,8 +8,8 @@ namespace ConsoleCalc
 {
     public abstract class MathOperation : IExecutable
     {
-        private Priority priority;
-        private NumberOfArgs numberOfArgs;
+        private readonly Priority priority;
+        protected readonly NumberOfArgs numberOfArgs;
         public MathOperation(Priority priority, NumberOfArgs numberOfArgs)
         {
             this.priority = priority;
@@ -32,7 +32,7 @@ namespace ConsoleCalc
     }
     public enum NumberOfArgs
     {
-        ONE,
+        ONE = 1,
         TWO
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    class Parser
+    public class Parser
     {
         private Lexem currentLexem;
-        private MathOperation currentOperation;
-        private String inputStr;
+ //       private MathOperation currentOperation;
+        private string inputStr;
         private int pt;
         private readonly Operations operations;
 
@@ -20,41 +20,63 @@ namespace ConsoleCalc
             operations = new Operations();
         }
 
+        public static string CutNumberFromString(string input, int startPt)
+        {
+            StringBuilder builder = new StringBuilder();
+            if (char.IsDigit(input[startPt]))
+            {
+                bool dotFlag = false;
+                while (startPt < input.Length)
+                {
+                    if (!char.IsDigit(input[startPt]))
+                    {
+                        if ((input[startPt] == ',') && !dotFlag)
+                        {
+                            dotFlag = true;
+                        }
+                        else break;
+                    }
+                    builder.Append(input[startPt]);
+                    startPt++;
+                }
+                
+            }
+            return builder.ToString();
+        }
 
-
-        public double countExpressionFromString(String input)
+        public double CountExpressionFromString(string input)
         {
             inputStr = input;
             pt = 0;
             this.currentLexem.type = LexemType.OPEN;
-            nextLexem();
-            double value = expression();
+            GetNextLexem();
+            double value = CountLowPriorityCmd();
             if (currentLexem.type != LexemType.END)
                 throw new SyntaxException("Can't find the end of expression", pt);
             return value;
         }
 
-        void nextLexem() 
+
+
+
+
+        void GetNextLexem() 
         {
             if (pt >= inputStr.Length)
             {
                 currentLexem.type = LexemType.END;
                 return;
             }
-            if (Char.IsDigit(inputStr[pt]))
+
+            if (char.IsDigit(inputStr[pt]))
             {
-                StringBuilder builder = new StringBuilder();
-                while (pt<inputStr.Length)
-                {
-                    if ((!Char.IsDigit(inputStr[pt])) && inputStr[pt] != '.')
-                        break;
-                    builder.Append(inputStr[pt]);
-                    pt++;
-                }
+                string numb = CutNumberFromString(inputStr, pt);
+                currentLexem.value = double.Parse(numb);
+                pt += numb.Length;
                 currentLexem.type = LexemType.NUMB;
-                currentLexem.value = Double.Parse(builder.ToString());
                 return;
             }
+
             switch (inputStr[pt])
             {
                 case '(':
@@ -64,80 +86,80 @@ namespace ConsoleCalc
                     currentLexem.type = LexemType.CLOSE;
                     break;
                 default:
-                    if (operations.containsCmd(inputStr[pt]))
+                    currentOperation = operations.GetOperation(inputStr[pt]);
+                    if (currentOperation == null)
                     {
-                        if (currentLexem.type == LexemType.CMD)
-                        {
-                            throw new SyntaxException("Two args in a row", pt);
-                        }
-                        currentLexem.type = LexemType.CMD;
-                        currentOperation = operations.getOperation(inputStr[pt]);
-                    } else throw new SyntaxException("Unknown argument", pt);
-                    
+                        throw new SyntaxException("Unknown argument", pt);
+                    } else if (currentLexem.type == LexemType.CMD)
+                    {
+                        throw new SyntaxException("Two args in a row", pt);
+                    }
+                    currentLexem.type = LexemType.CMD;
                     break;
             }
             pt++;
         }
 
-        public double expression()
+        public double CountLowPriorityCmd()
         {
-            double a = item();
+            double a = CountHightPriorityCmd();
             while ((currentLexem.type == LexemType.CMD) &&(currentOperation.GetPriority()==Priority.LOW))
             {
-                nextLexem();
-                a = currentOperation.Execute(a, item());
+                GetNextLexem();
+                a = currentOperation.Execute(a, CountHightPriorityCmd());
             }
             return a;
         }
-        public double item()
+
+        public double CountHightPriorityCmd()
         {
-            double a = mult();
+            double a = GetMultiplier();
             while ((currentLexem.type == LexemType.CMD) &&(currentOperation.GetPriority()==Priority.HIGHT))
             {
-                nextLexem();
-                a = currentOperation.Execute(a, item());
+                GetNextLexem();
+                a = currentOperation.Execute(a, CountHightPriorityCmd());
             }
             return a;
         }
 
-        public double mult()
+        public double GetMultiplier()
         {
-        double a = 0;
-        switch (currentLexem.type)
-        {
-            case LexemType.NUMB:
-                a = currentLexem.value;
-                nextLexem();
-                break;
-            case LexemType.OPEN:
-                nextLexem();
-                a = expression();
-                if (currentLexem.type !=LexemType.CLOSE)
-                {
-                    throw new SyntaxException("Incomplete expression, expected \")\"", pt);
-                }
-                    else nextLexem();
-                break;
-            case LexemType.CMD:
-                if(typeof(Subtraction).IsInstanceOfType(currentOperation))
-                {
-                    nextLexem();
-                    a = currentOperation.Execute(a, mult());
-                }
-                    else if(currentOperation.GetNumberOfArgs() == NumberOfArgs.ONE)
-                {
-                    nextLexem();
-                    a = currentOperation.Execute(mult());
-                }
-                    else throw new SyntaxException("Unexpected command", pt-1);
-                break;
-            default:
-                throw new SyntaxException("Unexpected command", pt-1);
+            double result = 0;
+            switch (currentLexem.type)
+            {
+                case LexemType.NUMB:
+                    result = currentLexem.value;
+                    GetNextLexem();
+                    break;
+                case LexemType.OPEN:
+                    GetNextLexem();
+                    result = CountLowPriorityCmd();
+                    if (currentLexem.type !=LexemType.CLOSE)
+                    {
+                        throw new SyntaxException("Incomplete expression, expected \")\"", pt);
+                    }
+                        else GetNextLexem();
+                    break;
+                case LexemType.CMD:
+                    if(typeof(Subtraction).IsInstanceOfType(currentOperation))
+                    {
+                        GetNextLexem();
+                        result = currentOperation.Execute(result, GetMultiplier());
+                    }
+                        else if(currentOperation.GetNumberOfArgs() == NumberOfArgs.ONE)
+                    {
+                        GetNextLexem();
+                        result = currentOperation.Execute(GetMultiplier());
+                    }
+                        else throw new SyntaxException("Unexpected command", pt-1);
+                    break;
+                case LexemType.END:
+                    throw new SyntaxException("Incomplete expression", pt - 1);
+                default:
+                    throw new SyntaxException("Unexpected command", pt-1);
+            }
+            return result;
         }
-        return a;
-        }
-
-
     }
 
 
@@ -152,6 +174,7 @@ namespace ConsoleCalc
 
     internal class Lexem
     {
+        internal char cmd;
         internal double value;
         internal LexemType type;
     }

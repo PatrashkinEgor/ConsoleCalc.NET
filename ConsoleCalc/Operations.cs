@@ -6,34 +6,31 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    class Operations
+    public class Operations
     {
-        private Dictionary<Char, MathOperation> mathOperations = new Dictionary<Char, MathOperation>();
+        readonly private Dictionary<char, MathOperation> mathOperations = new Dictionary<char, MathOperation>();
         public Operations()
         {
-        mathOperations.Add('+', new Summation());
-        mathOperations.Add('-', new Subtraction());
-        mathOperations.Add('*', new Multiplication());
-        mathOperations.Add('/', new Division());
+            mathOperations.Add('+', new Summation());
+            mathOperations.Add('-', new Subtraction());
+            mathOperations.Add('*', new Multiplication());
+            mathOperations.Add('/', new Division());
 
         }
 
-        public bool containsCmd(char cmd)
+        public bool ContainsCmd(char cmd)
         {
             return mathOperations.ContainsKey(cmd);
         }
 
-        public MathOperation getOperation(char cmd)
+        public MathOperation GetOperation(char cmd)
         {
-            try
+            if (ContainsCmd(cmd))
             {
                 return mathOperations[cmd];
             }
-            catch (ArgumentException e)
-            {
-                e.ToString();
-            }
-            return null;
+            else return null;
+
         }
     }
 }

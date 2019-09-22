@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalc
 {
-    class SyntaxException : System.Exception
+    public class SyntaxException : System.Exception
     {
         public SyntaxException(string message, int pointer) : base("\n" + message + " at symbol " + pointer + ".") { }
 
