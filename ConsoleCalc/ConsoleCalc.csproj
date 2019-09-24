@@ -53,7 +53,7 @@
     <Compile Include="Operations\IExecutable.cs" />
     <Compile Include="Operations\MathOperation.cs" />
     <Compile Include="Operations\Multiplication.cs" />
-    <Compile Include="Operations\NotEnoughArgsExeption.cs" />
+    <Compile Include="Operations\NotEnoughArgsException.cs" />
     <Compile Include="Operations\Operations.cs" />
     <Compile Include="ParsingCalculator\ParsingCalculator.cs" />
     <Compile Include="UI\SimpleUI.cs" />
