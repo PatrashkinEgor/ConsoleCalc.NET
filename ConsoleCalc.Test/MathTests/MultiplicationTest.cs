@@ -26,7 +26,7 @@ namespace ConsoleCalc.Test
         [Test]
         public void NullArgsTest()
         {
-            Assert.Catch<IndexOutOfRangeException>(() => mul.Execute());
+            Assert.Catch<NotEnoughArgsException>(() => mul.Execute());
         }
 
         [Test]

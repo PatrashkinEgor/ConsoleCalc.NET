@@ -28,7 +28,7 @@ namespace ConsoleCalc.Test
         public void NullArgsTest()
         {
             Summation sum = new Summation();
-            Assert.Catch<IndexOutOfRangeException>(() => sum.Execute());
+            Assert.Catch<NotEnoughArgsException>(() => sum.Execute());
         }
 
         [Test]

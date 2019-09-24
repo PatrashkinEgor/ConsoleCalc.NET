@@ -29,7 +29,7 @@ namespace ConsoleCalc.Test
         public void NullArgsTest()
         {
             Subtraction sub = new Subtraction();
-            Assert.Catch<IndexOutOfRangeException>(() => sub.Execute());
+            Assert.Catch<NotEnoughArgsException>(() => sub.Execute());
         }
 
         [Test]

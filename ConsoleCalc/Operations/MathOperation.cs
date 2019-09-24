@@ -24,6 +24,14 @@ namespace ConsoleCalc
             return numberOfArgs;
         }
 
+        protected bool EnoughArgsToExecute(int length)
+        {
+            if (length < (int)numberOfArgs)
+                throw new NotEnoughArgsException();
+            return true;
+        }
+
+
         public abstract double Execute(params double[] arg);
     }
     public enum Priority

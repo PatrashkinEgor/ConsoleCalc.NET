@@ -45,6 +45,11 @@ namespace ConsoleCalc
                 {
                     Console.WriteLine(ae.Message);
                 }
+                catch(NotEnoughArgsException ne)
+                {
+                    Console.WriteLine("Oops, something went wrong...\n");
+                    Console.WriteLine(ne.Message);
+                }
                 Console.Write("\nPress any key to continue... ");
                 Console.ReadLine();
             }

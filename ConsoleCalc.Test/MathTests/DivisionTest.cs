@@ -31,7 +31,7 @@ namespace ConsoleCalc.Test
         [Test]
         public void NullArgsTest()
         {
-            Assert.Catch<IndexOutOfRangeException>(() => div.Execute());
+            Assert.Catch<NotEnoughArgsException>(() => div.Execute());
         }
         [Test]
         public void PropertiesTest()

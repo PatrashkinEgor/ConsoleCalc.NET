@@ -13,8 +13,7 @@ namespace ConsoleCalc
         override
         public double Execute(params double[] arg)
         {
-            if (arg.Length < (int)numberOfArgs)
-                throw new IndexOutOfRangeException("Not enough arguments to multiply");
+            this.EnoughArgsToExecute(arg.Length);
             return arg[0] + arg[1];
         }
     }

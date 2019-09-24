@@ -11,8 +11,7 @@ namespace ConsoleCalc
         public Division() : base(Priority.HIGHT, NumberOfArgs.TWO) { }
         override public double Execute(params double[] arg)
         {
-            if (arg.Length < (int)numberOfArgs)
-                throw new IndexOutOfRangeException("Not enough arguments to multiply");
+            this.EnoughArgsToExecute(arg.Length);
 
             if (arg[1] == 0)
                 throw new DivideByZeroException("Division by zero is prohibited.");
